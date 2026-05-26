@@ -1,11 +1,14 @@
 const sequelize = require('../config/database');
-
-// Importar os modelos
 const User = require('./User');
 const Tweet = require('./Tweet');
 const Comment = require('./Comment');
 const Follower = require('./Follower');
 const Like = require('./Like');
+const Profile = require('./Profile');
+
+// Utilizadores e Perfis (Um-para-Um)
+User.hasOne(Profile, { foreignKey: 'fk_utilizador', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Profile.belongsTo(User, { foreignKey: 'fk_utilizador' });
 
 // Utilizadores e Tweets (Um-para-Muitos)
 User.hasMany(Tweet, { foreignKey: 'fk_utilizador', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
@@ -27,12 +30,12 @@ User.belongsToMany(User, { as: 'Seguindo', through: Follower, foreignKey: 'fk_se
 User.belongsToMany(Tweet, { through: Like, foreignKey: 'fk_utilizador', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 Tweet.belongsToMany(User, { through: Like, foreignKey: 'fk_tweet', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 
-// Exportar tudo empacotado
 module.exports = {
     sequelize,
     User,
     Tweet,
     Comment,
     Follower,
-    Like
+    Like,
+    Profile
 };
