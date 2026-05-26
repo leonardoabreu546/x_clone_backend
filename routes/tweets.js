@@ -1,15 +1,9 @@
 var express = require('express');
 var router = express.Router();
+const tweetController = require('../controllers/tweetController');
+const authMiddleware = require('../middleware/auth');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
-
-
-
-router.get('/:id/comment', function(req, res, next) {
-  res.send('respond with a resource');
-});
+// Rota para Publicar Tweet (Protegida)
+router.post('/', authMiddleware, tweetController.create);
 
 module.exports = router;
