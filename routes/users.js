@@ -18,7 +18,7 @@ router.post('/login', authController.login);
 // ROTAS DE INTERAÇÃO ENTRE UTILIZADORES
 // ==========================================
 
-// Rota para Seguir ou Deixar de Seguir (Protegida)
+// Rota para Seguir ou Deixar de Seguir
 router.post('/:id/follow', authMiddleware, followerController.toggleFollow);
 
 module.exports = router;
