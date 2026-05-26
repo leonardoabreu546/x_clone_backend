@@ -31,6 +31,23 @@ const tweetController = {
             console.error(erro);
             return res.status(500).json({ error: 'Erro ao publicar o tweet.' });
         }
+    },
+
+    // ==========================================
+    // FUNÇÃO PARA VER O FEED (LÊ TODOS OS TWEETS)
+    // ==========================================
+    async getFeed(req, res) {
+        try {
+            // Ir à base de dados buscar todos os tweets
+            const tweets = await Tweet.findAll({
+                order: [['data_criacao', 'DESC']] // Ordenar do mais recente para o mais antigo
+            });
+
+            return res.status(200).json(tweets);
+        } catch (erro) {
+            console.error(erro);
+            return res.status(500).json({ error: 'Erro ao carregar o feed de tweets.' });
+        }
     }
 };
 
