@@ -7,10 +7,6 @@ const Comment = require('./Comment');
 const Follower = require('./Follower');
 const Like = require('./Like');
 
-// ==========================================
-// DEFINIÇÃO DAS RELAÇÕES (ASSOCIAÇÕES)
-// ==========================================
-
 // Utilizadores e Tweets (Um-para-Muitos)
 User.hasMany(Tweet, { foreignKey: 'fk_utilizador', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 Tweet.belongsTo(User, { foreignKey: 'fk_utilizador' });

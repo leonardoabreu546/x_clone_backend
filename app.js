@@ -19,4 +19,17 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/tweets', tweetsRouter);
 
+// ==========================================
+// TESTE DE LIGAÇÃO À BASE DE DADOS
+// ==========================================
+const { sequelize } = require('./models');
+
+sequelize.authenticate()
+  .then(() => {
+    console.log('Ligação à Base de Dados estabelecida com sucesso!');
+  })
+  .catch((erro) => {
+    console.error('Erro ao ligar à Base de Dados:', erro);
+  });
+
 module.exports = app;
