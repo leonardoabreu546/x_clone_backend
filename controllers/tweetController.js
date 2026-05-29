@@ -2,22 +2,29 @@ const { Tweet, User, Like, Follower } = require('../models');
 
 const tweetController = {
     // ==========================================
-    // FUNÇÃO PARA PUBLICAR UM TWEET
+    // FUNÇÃO PARA PUBLICAR UM TWEET (COM IMAGEM)
     // ==========================================
     async create(req, res) {
         try {
-            const { mensagem, imagem } = req.body;
+            // A imagem agora não vem no req.body, vem no req.file através do multer
+            const { mensagem } = req.body;
+            
+            // Lógica do Multer para guardar o caminho da imagem
+            let imagemCaminho = null;
+            if (req.file) {
+                imagemCaminho = '/uploads/' + req.file.filename;
+            }
             
             // O nosso middleware de autenticação guarda o ID aqui:
             const userId = req.user.userId;
 
-            //Buscar o utilizador à base de dados para saber o username dele
+            // Buscar o utilizador à base de dados para saber o username dele
             const user = await User.findByPk(userId);
 
             // Criar o tweet
             const novoTweet = await Tweet.create({
                 mensagem: mensagem,
-                imagem: imagem || null,
+                imagem: imagemCaminho, // Guardamos o caminho gerado pelo Multer
                 autor: user.username,
                 fk_utilizador: userId
             });
@@ -57,7 +64,7 @@ const tweetController = {
         try {
             const userId = req.user.userId;
 
-            // 1. Procurar os IDs de todos os utilizadores que tu segues
+            // Procurar os IDs de todos os utilizadores que tu segues
             const pessoasQueSigo = await Follower.findAll({
                 where: { fk_seguidor: userId }
             });
@@ -65,7 +72,7 @@ const tweetController = {
             // Extrair apenas os IDs para uma lista simples (ex: [2, 5, 12])
             const listaIds = pessoasQueSigo.map(seguido => seguido.fk_seguido);
 
-            // 2. Ir à base de dados buscar APENAS os tweets dessas pessoas
+            // Ir à base de dados buscar APENAS os tweets dessas pessoas
             const tweets = await Tweet.findAll({
                 where: { fk_utilizador: listaIds },
                 order: [['data_criacao', 'DESC']] // Do mais recente para o mais antigo
