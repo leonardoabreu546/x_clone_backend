@@ -1,4 +1,4 @@
-const { Tweet, User, Like } = require('../models');
+const { Tweet, User, Like, Follower } = require('../models');
 
 const tweetController = {
     // ==========================================
@@ -34,7 +34,7 @@ const tweetController = {
     },
 
     // ==========================================
-    // FUNÇÃO PARA VER O FEED
+    // FUNÇÃO PARA VER O FEED GLOBAL (EXPLORAR)
     // ==========================================
     async getFeed(req, res) {
         try {
@@ -47,6 +47,34 @@ const tweetController = {
         } catch (erro) {
             console.error(erro);
             return res.status(500).json({ error: 'Erro ao carregar o feed de tweets.' });
+        }
+    },
+
+    // ==========================================
+    // FUNÇÃO PARA VER O FEED PESSOAL (SÓ CONTAS SEGUIDAS)
+    // ==========================================
+    async getFollowingFeed(req, res) {
+        try {
+            const userId = req.user.userId;
+
+            // 1. Procurar os IDs de todos os utilizadores que tu segues
+            const pessoasQueSigo = await Follower.findAll({
+                where: { fk_seguidor: userId }
+            });
+
+            // Extrair apenas os IDs para uma lista simples (ex: [2, 5, 12])
+            const listaIds = pessoasQueSigo.map(seguido => seguido.fk_seguido);
+
+            // 2. Ir à base de dados buscar APENAS os tweets dessas pessoas
+            const tweets = await Tweet.findAll({
+                where: { fk_utilizador: listaIds },
+                order: [['data_criacao', 'DESC']] // Do mais recente para o mais antigo
+            });
+
+            return res.status(200).json(tweets);
+        } catch (erro) {
+            console.error(erro);
+            return res.status(500).json({ error: 'Erro ao carregar o feed pessoal.' });
         }
     },
 
