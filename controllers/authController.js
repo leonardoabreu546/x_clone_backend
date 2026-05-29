@@ -13,14 +13,14 @@ const authController = {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
 
-            // 1. Criar o utilizador
+            // Criar o utilizador
             const newUser = await User.create({
                 username: username,
                 email: email,
                 password: hashedPassword
             });
 
-            // 2. Criar o perfil vazio automaticamente (Relação 1:1)
+            // Criar o perfil vazio automaticamente (Relação 1:1)
             await Profile.create({
                 fk_utilizador: newUser.id_utilizador
             });
