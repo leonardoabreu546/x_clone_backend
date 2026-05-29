@@ -14,11 +14,14 @@ router.post('/signup', authController.signup);
 // Rota de Login
 router.post('/login', authController.login);
 
+// Rota de Logout (Protegida, porque só faz logout quem tem login feito)
+router.post('/logout', authMiddleware, authController.logout);
+
 // ==========================================
 // ROTAS DE INTERAÇÃO ENTRE UTILIZADORES
 // ==========================================
 
-// Rota para Seguir ou Deixar de Seguir
+// Rota para Seguir ou Deixar de Seguir (Protegida)
 router.post('/:id/follow', authMiddleware, followerController.toggleFollow);
 
 module.exports = router;

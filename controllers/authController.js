@@ -13,14 +13,14 @@ const authController = {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
 
-            // Criar o utilizador
+            // 1. Criar o utilizador
             const newUser = await User.create({
                 username: username,
                 email: email,
                 password: hashedPassword
             });
 
-            // Criar o perfil vazio automaticamente (Relação 1:1)
+            // 2. Criar o perfil vazio automaticamente (Relação 1:1)
             await Profile.create({
                 fk_utilizador: newUser.id_utilizador
             });
@@ -75,6 +75,21 @@ const authController = {
         } catch (erro) {
             console.error(erro);
             return res.status(500).json({ error: 'Erro interno ao efetuar login.' });
+        }
+    },
+
+    // ==========================================
+    // FUNÇÃO DE LOGOUT
+    // ==========================================
+    async logout(req, res) {
+        try {
+            // Como usamos JWT, a destruição real do token é feita no Front-End.
+            return res.status(200).json({ 
+                message: 'Logout efetuado com sucesso. Por favor, remova o token no lado do cliente.' 
+            });
+        } catch (erro) {
+            console.error(erro);
+            return res.status(500).json({ error: 'Erro interno ao efetuar logout.' });
         }
     }
 };
