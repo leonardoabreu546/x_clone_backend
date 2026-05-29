@@ -10,12 +10,27 @@ var adminRouter = require('./routes/admin');
 
 var app = express();
 
+// ==========================================
+// IMPORTAÇÕES DO SWAGGER
+// ==========================================
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ==========================================
+// ROTA DA DOCUMENTAÇÃO (SWAGGER UI)
+// ==========================================
+// Acesso: GET http://localhost:3000/api-docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// ==========================================
+// REGISTO DAS ROTAS DA API
+// ==========================================
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/tweets', tweetsRouter);
