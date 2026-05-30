@@ -28,4 +28,4 @@ router.post('/:id/like', authMiddleware, tweetController.toggleLike);
 // Rota para Comentar num Tweet 
 router.post('/:id/comments', authMiddleware, commentController.create);
 
-module.exports = router;s
+module.exports = router;
