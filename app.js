@@ -41,12 +41,12 @@ app.use('/admin', adminRouter);
 // ==========================================
 const { sequelize } = require('./models');
 
-sequelize.sync({ alter: true })
+sequelize.authenticate()
   .then(() => {
-    console.log('Base de Dados sincronizada e pronta a usar!');
+    console.log('Ligação à Base de Dados estabelecida com sucesso!');
   })
   .catch((erro) => {
-    console.error('Erro ao sincronizar a Base de Dados:', erro);
+    console.error('Erro ao ligar à Base de Dados:', erro);
   });
 
 module.exports = app;
