@@ -34,12 +34,8 @@ const authController = {
                 }
             });
         } catch (erro) {
-            console.error("ERRO COMPLETO:", erro); 
-            // Alteramos a linha abaixo para incluir a mensagem real do erro
-            return res.status(500).json({ 
-                error: 'Erro interno ao registar o utilizador.',
-                detalhe: erro.message 
-            });
+            console.error(erro);
+            return res.status(500).json({ error: 'Erro interno ao registar o utilizador.' });
         }
     },
 
